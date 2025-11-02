@@ -52,8 +52,8 @@ pipeline {
             steps {
                 echo "🚀 Deploying to Kubernetes..."
                 withKubeConfig(
-                    credentialsId: 'k8sID',
-                    namespace: 'spring-boot'
+                    credentialsId: 'k8sID'
+                    
                 ) {
                     sh '''
                       
