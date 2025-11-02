@@ -10,7 +10,10 @@ pipeline{
     }
     stages{
         stage('git clone'){
-            git branch: 'main', url: 'https://github.com/BasavarajGudageri-05/java-springboot-application.git'
+            steps{
+                git branch: 'main', url: 'https://github.com/BasavarajGudageri-05/java-springboot-application.git'
+            }
+            
         }
         stage('maven compile'){
             steps{
