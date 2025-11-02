@@ -56,8 +56,7 @@ pipeline {
                     namespace: 'spring-boot'
                 ) {
                     sh '''
-                        echo 'Applying namespace...'
-                        kubectl apply -f namespace.yaml
+                      
                         
                         echo '📦 Applying deployment...'
                         kubectl apply -f Deployment.yaml
