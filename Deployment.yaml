@@ -2,7 +2,6 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: spring-boot
-  namespace: spring-boot
 spec:
   replicas: 3
   selector:
@@ -30,7 +29,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: springboot-svc
-  namespace: spring-boot
 spec:
   selector:
     app: spring-boot
