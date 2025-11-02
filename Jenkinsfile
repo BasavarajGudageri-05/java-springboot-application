@@ -28,7 +28,7 @@ pipeline{
         stage('build image'){
             steps{
                 echo 'building docker image'
-                sh 'docker build -t $IMAGE_NAME:latest .'
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
         stage('docker login'){
