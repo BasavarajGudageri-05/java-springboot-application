@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: spring-boot
+  namespace: spring-boot
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spring-boot
+  template:
+    metadata:
+      labels:
+        app: spring-boot
+    spec:
+      containers:
+      - name: spring-boot
+        image: babugudageri/my-projects:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: springboot-svc
+  namespace: spring-boot
+spec:
+  selector:
+    app: spring-boot
+  ports:
+  - protocol: "TCP"
+    port: 8080
+    targetPort: 8080
+  type: NodePort
