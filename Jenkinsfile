@@ -35,7 +35,7 @@ pipeline{
             steps{
                 withCredentials([usernamePassword(credentialsId: 'dockerID', passwordVariable: 'DOCKER_PASSOWRD', usernameVariable: 'DOCKER_USER')]) {
                     sh """
-                echo "$DOCKER_PASSOWRD" | docker login -u "DOCKER_USER" --password -stdin
+                echo "$DOCKER_PASSOWRD" | docker login -u "DOCKER_USER" --password-stdin
                 docker push $IMAGE_NAME:latest
                  """
 }
