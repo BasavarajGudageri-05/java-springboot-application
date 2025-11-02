@@ -6,7 +6,7 @@ pipeline{
 
     }
     environment{
-        IMAGE_NAME= "babugudageri/spring-boot:{GIT_COMMIT}"
+        IMAGE_NAME= "babugudageri/spring-boot"
     }
     stages{
         stage('git clone'){
@@ -28,7 +28,7 @@ pipeline{
         stage('build image'){
             steps{
                 echo 'building docker image'
-                sh 'docker build -t $IMAGE_NAME .'
+                sh 'docker build -t $IMAGE_NAME:latest .'
             }
         }
         stage('docker login'){
