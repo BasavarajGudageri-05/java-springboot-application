@@ -41,23 +41,26 @@ pipeline{
 
                     
 }
-   
-                
+       stage{
+           steps{
+               
+                 echo "Deploying to Kubernetes"
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8sID', namespace: 'spring-boot', restrictKubeConfigAccess: false, serverUrl: '')  {
+                    sh """ 
+                        
+                       echo 'applying namespace'
+                         kubectl appy -f namespace.yaml
+                         echo '📦 Applying deployment'
+                         kubectl apply -f Deployment.yaml
+
+                         
 
             
             }
         }
         stage('Deploy in k8s'){
             steps{
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8sID', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
-    
-}               
-                sh """
-                  echo ' cretaing name space'
-                  kubectl apply -f namespace.yaml
-                  echo 'applying deployment and service'
-                  kubectl apply -f Deployment.yaml
-                """
+          
                
             }
         }
