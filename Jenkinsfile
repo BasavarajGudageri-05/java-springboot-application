@@ -1,71 +1,71 @@
-pipeline{
+pipeline {
     agent any
+
     tools {
         jdk 'java-17'
         maven 'maven'
+    }
 
+    environment {
+        IMAGE_NAME = "babugudageri/spring-boot"
     }
-    environment{
-        IMAGE_NAME= "babugudageri/spring-boot"
-    }
-    stages{
-        stage('git clone'){
-            steps{
+
+    stages {
+
+        stage('Git Clone') {
+            steps {
                 git branch: 'main', url: 'https://github.com/BasavarajGudageri-05/java-springboot-application.git'
             }
-            
         }
-        stage('maven compile'){
-            steps{
+
+        stage('Maven Compile') {
+            steps {
                 sh 'mvn compile'
             }
         }
-        stage ('maven build'){
-            steps{
-                sh 'mvn clean package'
+
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
             }
         }
-        stage('build image'){
-            steps{
-                echo 'building docker image'
+
+        stage('Build Docker Image') {
+            steps {
+                echo '🏗️ Building Docker image...'
                 sh 'docker build -t $IMAGE_NAME:latest .'
             }
         }
-        stage('docker login'){
-            steps{
+
+        stage('Docker Login & Push') {
+            steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerID', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USER')]) {
-                     sh '''
-                            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-                            docker push $IMAGE_NAME
-                     '''
+                    sh '''
+                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $IMAGE_NAME:latest
+                    '''
+                }
+            }
+        }
 
-                    
-}
-       stage{
-           steps{
-               
-                 echo "Deploying to Kubernetes"
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8sID', namespace: 'spring-boot', restrictKubeConfigAccess: false, serverUrl: '')  {
-                    sh """ 
+        stage('Deploy to Kubernetes') {
+            steps {
+                echo "🚀 Deploying to Kubernetes..."
+                withKubeConfig(
+                    credentialsId: 'k8sID',
+                    namespace: 'spring-boot'
+                ) {
+                    sh '''
+                        echo 'Applying namespace...'
+                        kubectl apply -f namespace.yaml
                         
-                       echo 'applying namespace'
-                         kubectl appy -f namespace.yaml
-                         echo '📦 Applying deployment'
-                         kubectl apply -f Deployment.yaml
-                         }
-                         }
-
-                         
-
-            
+                        echo '📦 Applying deployment...'
+                        kubectl apply -f Deployment.yaml
+                        
+                        echo '✅ Deployment complete!'
+                    '''
+                }
             }
         }
-        stage('Deploy in k8s'){
-            steps{
-          
-               
-            }
-        }
-
     }
 }
