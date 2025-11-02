@@ -52,6 +52,8 @@ pipeline{
                          kubectl appy -f namespace.yaml
                          echo '📦 Applying deployment'
                          kubectl apply -f Deployment.yaml
+                         }
+                         }
 
                          
 
